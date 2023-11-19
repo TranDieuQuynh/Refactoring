@@ -43,7 +43,7 @@ public class translatorController implements Initializable {
     @FXML
     Hyperlink hypLink = new Hyperlink();
 
-    void initButtonControl() {
+    private void initButtonControl() {
         addTranslateListener();
 
         hypLink.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -61,36 +61,44 @@ public class translatorController implements Initializable {
         langTo.getSelectionModel().selectFirst();
     }
 
-    String getTranslateRes() throws IOException {
-        int indexFrom = langFrom.getSelectionModel().getSelectedIndex();
-        int indexTo = langTo.getSelectionModel().getSelectedIndex();
+    private void openGoogleTranslatePage() throws IOException, URISyntaxException {
 
-        if (indexFrom < 0 || indexTo < 0 || indexFrom == indexTo) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setHeaderText("Please choose a pair of 2 diffirent langueges");
-            alert.showAndWait();
-            return "";
-        }
-
-        return TranslateAPI.translate(langIso[indexFrom], langIso[indexTo], targetArea.getText());
+        
     }
 
-    void addTranslateListener() {
-        translateButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            try {
-                String res = new String();
-                res = getTranslateRes();
-                resultArea.setText(res);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initButtonControl();
-    }
-
-}
+/*
+ * String getTranslateRes() throws IOException {
+ * int indexFrom = langFrom.getSelectionModel().getSelectedIndex();
+ * int indexTo = langTo.getSelectionModel().getSelectedIndex();
+ * 
+ * if (indexFrom < 0 || indexTo < 0 || indexFrom == indexTo) {
+ * Alert alert = new Alert(AlertType.INFORMATION);
+ * alert.setHeaderText("Please choose a pair of 2 diffirent langueges");
+ * alert.showAndWait();
+ * return "";
+ * }
+ * 
+ * return TranslateAPI.translate(langIso[indexFrom], langIso[indexTo],
+ * targetArea.getText());
+ * }
+ * 
+ * void addTranslateListener() {
+ * translateButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+ * try {
+ * String res = new String();
+ * res = getTranslateRes();
+ * resultArea.setText(res);
+ * } catch (IOException e) {
+ * e.printStackTrace();
+ * }
+ * });
+ * 
+ * }
+ * 
+ * @Override
+ * public void initialize(URL location, ResourceBundle resources) {
+ * initButtonControl();
+ * }
+ * 
+ * }
+ */

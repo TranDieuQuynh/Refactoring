@@ -20,49 +20,43 @@ import javafx.scene.input.MouseEvent;
 
 public class editController extends wordFormController implements Initializable {
 
-    void applyChange() {
-        Alert alert = new Alert(AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
-        alert.setHeaderText("Do you want to apply your change to \"" + targetField.getText() + "\"?");
-        alert.showAndWait();
-        if (alert.getResult() != ButtonType.OK) {
-            return;
-        }
-
-        Word word = getDefElement();
-        System.out.println(TransferedData.wordIndex);
-        System.out.println(TransferedData.dict.size());
-        TransferedData.dict.removeWord(TransferedData.wordIndex);
-        System.out.println(TransferedData.dict.size());
-        TransferedData.dict.addWord(word);
+    private void saveAndLoadDictionary() {
         try {
             TransferedData.dict.saveJson(DICT_PATH);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        try {
             TransferedData.dict.loadJson(DICT_PATH);
-            TransferedData.dict.size.add(1);
-            TransferedData.dict.size.add(-1);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-        alert.setAlertType(AlertType.INFORMATION);
-        alert.setHeaderText("Your change is apply. Please reload the application");
-        alert.show();
-        wrapFormPane.getChildren().clear();
     }
 
-    void initButtonControl() {
-        okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            applyChange();
-        });
+    private void showAlert(AlertType alertType, String headerText, String contentText) {
+        Alert alert = new Alert(alertType, contentText, ButtonType.OK);
+        alert.setHeaderText(headerText);
+        alert.showAndWait();
+    }
 
-        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+    private void applyChange() {
+        Alert alert = new Alert(AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
+        alert.setHeaderText("Do you want to apply your change to \"" + targetField.getText() + "\"?");
+
+        if (alert.getResult() == ButtonType.OK) {
+            Word word = getDefElement();
+            System.out.println(TransferedData.wordIndex);
+            System.out.println(TransferedData.dict.size());
+            TransferedData.dict.removeWord(TransferedData.wordIndex);
+            System.out.println(TransferedData.dict.size());
+            TransferedData.dict.addWord(word);
+
+            saveAndLoadDictionary();
+
+            showAlert(AlertType.INFORMATION, "Information", "Your change is applied. Please reload the application");
             wrapFormPane.getChildren().clear();
-        });
+        }
+    }
+
+    private void initButtonControl() {
+        okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> applyChange());
+        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> wrapFormPane.getChildren().clear());
     }
 
     @Override
@@ -80,5 +74,4 @@ public class editController extends wordFormController implements Initializable 
         loadHTML(FORM_PATH);
         initButtonControl();
     }
-
 }
